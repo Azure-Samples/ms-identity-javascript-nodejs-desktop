@@ -8,12 +8,22 @@ const { protocol } = require('electron');
 const path = require('path');
 const url = require('url');
 
+/**
+ * To demonstrate best security practices, this Electron sample application makes use of 
+ * a custom file protocol instead of a regular web (https://) redirect URI in order to 
+ * handle the redirection step of the authorization flow, as suggested in the OAuth2.0 specification for Native Apps.
+ */
 const CUSTOM_FILE_PROTOCOL_NAME = process.env.REDIRECT_URI.split(':')[0];
 
+/**
+ * Configuration object to be passed to MSAL instance on creation. 
+ * For a full list of MSAL Node configuration parameters, visit:
+ * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-node/docs/configuration.md 
+ */
 const MSAL_CONFIG = {
     auth: {
         clientId: process.env.CLIENT_ID,
-        authority: 'https://login.microsoftonline.com/' + process.env.TENANT_ID,
+        authority: `${process.env.AAD_ENDPOINT_HOST}${process.env.TENANT_ID}`,
         redirectUri: process.env.REDIRECT_URI,
     },
     system: {
@@ -35,6 +45,10 @@ class AuthProvider {
     account;
 
     constructor() {
+        /**
+         * Initialize a public client application. For more information, visit:
+         * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-node/docs/initialize-public-client-application.md 
+         */
         this.clientApplication = new PublicClientApplication(MSAL_CONFIG);
         this.account = null;
         this.setRequestObjects();
@@ -111,7 +125,7 @@ class AuthProvider {
         });
     }
 
-        /**
+    /**
      * Handles the response from a popup or redirect. If response is null, will check if we have any accounts and attempt to sign in.
      * @param response 
      */

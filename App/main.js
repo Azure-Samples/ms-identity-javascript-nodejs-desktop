@@ -12,8 +12,6 @@ const { IPC_MESSAGES } = require('./constants');
 const { callEndpointWithToken } = require('./fetch');
 const AuthProvider = require('./AuthProvider');
 
-console.log(`${process.env.GRAPH_ENDPOINT_HOST}${process.env.GRAPH_MAIL_ENDPOINT}`);
-
 const authProvider = new AuthProvider();
 let mainWindow;
 
