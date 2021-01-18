@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+	<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+	<title>MSAL Node Electron Sample App</title>
+
+	<!-- adding Bootstrap 4 for UI components  -->
+	<link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
+	<!-- <link rel="SHORTCUT ICON" href="https://c.s-microsoft.com/favicon.ico?v2" type="image/x-icon"> -->
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+		<a class="navbar-brand">Microsoft identity platform</a>
+		<div class="btn-group ml-auto dropleft">
+			<button type="button" id="signIn" class="btn btn-secondary" aria-expanded="false">
+				Sign in
+			</button>
+			<button type="button" id="signOut" class="btn btn-success" hidden aria-expanded="false">
+				Sign out
+			</button>
+		</div>
+	</nav>
+	<br>
+	<h5 class="card-header text-center">Electron sample app calling MS Graph API using MSAL Node</h5>
+	<br>
+	<div class="row" style="margin:auto">
+		<div id="cardDiv" class="col-md-3" style="display:none">
+			<div class="card text-center">
+				<div class="card-body">
+					<h5 class="card-title" id="WelcomeMessage">Please sign-in to see your profile and read your mails
+					</h5>
+					<div id="profileDiv"></div>
+					<br>
+					<br>
+					<button class="btn btn-primary" id="seeProfile">See Profile</button>
+					<br>
+					<br>
+					<button class="btn btn-primary" id="readMail">Read Mails</button>
+				</div>
+			</div>
+		</div>
+		<br>
+		<br>
+		<div class="col-md-4">
+			<div class="list-group" id="list-tab" role="tablist">
+			</div>
+		</div>
+		<div class="col-md-5">
+			<div class="tab-content" id="nav-tabContent">
+			</div>
+		</div>
+	</div>
+	<br>
+	<br>
+
+	<script>
+		window.jQuery = window.$ = require('jquery');
+		require("./renderer.js");
+	</script>
+
+	<!-- importing bootstrap.js and supporting js libraries -->
+	<script src="../node_modules/jquery/dist/jquery.js"></script>
+	<script src="../node_modules/popper.js/dist/umd/popper.js"></script>
+	<script src="../node_modules/bootstrap/dist/js/bootstrap.js"></script>
+</body>
+
+</html>
