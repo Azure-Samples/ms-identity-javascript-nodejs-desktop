@@ -13,7 +13,7 @@ urlFragment: "ms-identity-javascript-nodejs-desktop"
 
 # An Electron desktop application secured by MSAL Node (Preview) on Microsoft identity platform
 
-This sample demonstrates how to use [MSAL Node (Preview)](https://github.com/AzureAD/microsoft-authentication-library-for-js/tree/dev/lib/msal-node) to acquire an access token for a protected resource such as Microsoft Graph in a console application using the application's own identity ([client credentials flow](https://docs.microsoft.com/azure/active-directory/develop/v2-oauth2-client-creds-grant-flow)).
+This sample demonstrates how to use [MSAL Node (Preview)](https://github.com/AzureAD/microsoft-authentication-library-for-js/tree/dev/lib/msal-node) to sign-in a user and acquire an access token for a protected resource such as Microsoft Graph in an Electron desktop application using the ([authorization code grant with PKCE](https://docs.microsoft.com/azure/active-directory/develop/v2-oauth2-auth-code-flow)).
 
 > :information_source: Looking for a TypeScript implementation? See: [ElectronTestApp](https://github.com/AzureAD/microsoft-authentication-library-for-js/tree/dev/samples/msal-node-samples/standalone-samples/ElectronTestApp)
 
@@ -32,10 +32,10 @@ This sample demonstrates the following **MSAL Node** concepts:
 |-----------------------|--------------------------------------------------------------|
 | `AppCreationScripts/` | Contains Powershell scripts for automating app registration. |
 | `App/authProvider.js` | Main authentication logic resides here.                      |
-| `App/main.js`         | Contains the authentication configuration parameters.        |
-| `App/fetch.js`        | Contains an implementation of Graph JavaScript client SDK.   |
-| `App/renderer.js`     | Example user accounts in JSON                                |
-| `App/constants.js`     | Example user accounts in JSON                               |
+| `App/main.js`         | Application main process.                                    |
+| `App/fetch.js`        | Axios HTTP client for calling endpoints with a bearer token. |
+| `App/renderer.js`     | Renderer processes and UI methods.                           |
+| `App/constants.js`    | Example user accounts in JSON                                |
 | `.env`                | Environment variables of authentication parameters.          |
 
 ## Getting Started
