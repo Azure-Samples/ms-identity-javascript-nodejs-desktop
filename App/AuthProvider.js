@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  */
 
-const { PublicClientApplication, LogLevel } = require('@azure/msal-node');
+const { PublicClientApplication, LogLevel, CryptoProvider } = require('@azure/msal-node');
 const { protocol } = require('electron');
 const path = require('path');
 const url = require('url');
@@ -40,8 +40,10 @@ const MSAL_CONFIG = {
 class AuthProvider {
 
     clientApplication;
+    cryptoProvider;
     authCodeUrlParams;
     authCodeRequest;
+    pkceCodes;
     account;
 
     constructor() {
@@ -51,6 +53,10 @@ class AuthProvider {
          */
         this.clientApplication = new PublicClientApplication(MSAL_CONFIG);
         this.account = null;
+
+        // Initialize CryptoProvider instance
+        this.cryptoProvider = new CryptoProvider();
+
         this.setRequestObjects();
     }
 
@@ -71,6 +77,12 @@ class AuthProvider {
             redirectUri: redirectUri,
             code: null
         }
+
+        this.pkceCodes = {
+            challengeMethod: "S256", // Use SHA256 Algorithm
+            verifier: "", // Generate a code verifier for the Auth Code Request first
+            challenge: "" // Generate a code challenge from the previously generated code verifier
+        };
     }
 
     async login(authWindow) {
@@ -94,7 +106,33 @@ class AuthProvider {
     }
 
     async getTokenInteractive(authWindow, tokenRequest) {
-        const authCodeUrlParams = { ...this.authCodeUrlParams, scopes: tokenRequest.scopes };
+
+        /**
+         * Proof Key for Code Exchange (PKCE) Setup
+         * 
+         * MSAL enables PKCE in the Authorization Code Grant Flow by including the codeChallenge and codeChallengeMethod parameters
+         * in the request passed into getAuthCodeUrl() API, as well as the codeVerifier parameter in the
+         * second leg (acquireTokenByCode() API).
+         * 
+         * MSAL Node provides PKCE Generation tools through the CryptoProvider class, which exposes
+         * the generatePkceCodes() asynchronous API. As illustrated in the example below, the verifier
+         * and challenge values should be generated previous to the authorization flow initiation.
+         * 
+         * For details on PKCE code generation logic, consult the 
+         * PKCE specification https://tools.ietf.org/html/rfc7636#section-4
+         */
+
+        const {verifier, challenge} = await this.cryptoProvider.generatePkceCodes();
+        this.pkceCodes.verifier = verifier;
+        this.pkceCodes.challenge = challenge;
+
+        const authCodeUrlParams = { 
+            ...this.authCodeUrlParams, 
+            scopes: tokenRequest.scopes,
+            codeChallenge: this.pkceCodes.challenge, // PKCE Code Challenge
+            codeChallengeMethod: this.pkceCodes.challengeMethod // PKCE Code Challenge Method 
+        };
+
         const authCodeUrl = await this.clientApplication.getAuthCodeUrl(authCodeUrlParams);
 
         protocol.registerFileProtocol(CUSTOM_FILE_PROTOCOL_NAME, (req, callback) => {
@@ -103,7 +141,13 @@ class AuthProvider {
         });
 
         const authCode = await this.listenForAuthCode(authCodeUrl, authWindow);
-        const authResponse = await this.clientApplication.acquireTokenByCode({ ...this.authCodeRequest, scopes: tokenRequest.scopes, code: authCode });
+        
+        const authResponse = await this.clientApplication.acquireTokenByCode({ 
+            ...this.authCodeRequest, 
+            scopes: tokenRequest.scopes, 
+            code: authCode,
+            codeVerifier: this.pkceCodes.verifier // PKCE Code Verifier 
+        });
         
         return authResponse;
     }
