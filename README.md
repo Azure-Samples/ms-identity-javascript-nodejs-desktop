@@ -48,10 +48,9 @@ This sample demonstrates the following **MSAL Node** concepts:
 ### Setup
 
 1. Register a [desktop app that calls web APIs](https://docs.microsoft.com/azure/active-directory/develop/scenario-desktop-app-registration) in the [Azure Portal](https://portal.azure.com).
-    - Navigate to the Authentication blade in the app registration.
-    - Be sure to **remove** any platforms registered here (e.g. web application, SPA, etc)
-    - Click add a platform and choose **Mobile and Desktop application.**
-    - For the **redirect URI**, choose custom redirect URI. Enter `msal://redirect` into the input box.
+    * Navigate to the **Authentication** blade in the app registration.
+    * Click add a platform and choose **Mobile and Desktop application**
+    * For the **redirect URI**, enter `msal://redirect` into the input box.
 1. Clone this repository `git clone https://github.com/Azure-Samples/ms-identity-javascript-nodejs-desktop.git`
 1. Open the [.env](.env) file and provide the required configuration values.
     1. Replace the string `Enter_the_Application_Id_Here` with your app/client ID on Azure AD portal.
