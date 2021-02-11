@@ -1,0 +1,30 @@
+{
+  "name": "electron-test-app",
+  "version": "1.0.0",
+  "description": "A sample Electron application that uses msal-node to acquire tokens",
+  "main": "Main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron App/Main.js"
+  },
+  "keywords": [
+    "msal-node",
+    "electron",
+    "javascript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "electron": "^10.1.6",
+    "webpack": "^5.6.0"
+  },
+  "dependencies": {
+    "@azure/msal-node": "^1.0.0-beta.3",
+    "axios": "^0.21.0",
+    "bootstrap": "^4.5.3",
+    "dotenv": "^8.2.0",
+    "jquery": "^3.5.1",
+    "popper.js": "^1.16.1"
+  }
+}
