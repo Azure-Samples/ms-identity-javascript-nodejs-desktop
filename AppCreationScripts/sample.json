@@ -38,10 +38,6 @@
 					"value": ".AppId"
 				},
 				{
-					"key": "Enter_the_Redirect_Uri_Here",
-					"value": ".ReplyUrls"
-				},
-				{
 					"key": "Enter_the_Cloud_Instance_Id_Here",
 					"value": "'https://login.microsoftonline.com/'"
 				},
