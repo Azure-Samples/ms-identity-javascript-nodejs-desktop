@@ -54,7 +54,7 @@ This sample demonstrates the following **MSAL Node** concepts:
 1. Clone this repository `git clone https://github.com/Azure-Samples/ms-identity-javascript-nodejs-desktop.git`
 1. Open the [.env](.env) file and provide the required configuration values.
     1. Replace the string `Enter_the_Application_Id_Here` with your app/client ID on Azure AD portal.
-    1. Replace the string `Enter_the_Tenant_Id_Here` with your tenant ID on Azure AD portal.
+    1. Replace the string `Enter_the_Tenant_Info_Here` with your tenant ID on Azure AD portal.
     1. Replace the string `Enter_the_Cloud_Instance_Id_Here` with `https://login.microsoftonline.com/` (see **note** below).
     1. Replace the string `Enter_the_Graph_Endpoint_Here`. with `https://graph.microsoft.com/` (see **note** below).
 
