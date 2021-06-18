@@ -161,6 +161,10 @@ class AuthProvider {
                 try {
                     const parsedUrl = new URL(responseUrl);
                     const authCode = parsedUrl.searchParams.get('code');
+                    // We may get redirected more than once if user has multi-factor authentication
+                    if (!authCode){
+                        return;// auth code null
+                    }
                     resolve(authCode);
                 } catch (err) {
                     reject(err);
