@@ -19,16 +19,14 @@ function createWindow () {
     mainWindow = new BrowserWindow({
       width: 800,
       height: 600,
-      webPreferences: {
-        nodeIntegration: true
-      }
-    })
+      webPreferences: { preload: path.join(__dirname, "preload.js") },
+    });
   
-    mainWindow.loadFile(path.join(__dirname, './index.html'));
   }
 
 app.on('ready', () => {
     createWindow();
+    mainWindow.loadFile(path.join(__dirname, "./index.html"));
 });
 
 app.on('window-all-closed', () => {
@@ -39,9 +37,7 @@ app.on('window-all-closed', () => {
 // Event handlers
 ipcMain.on(IPC_MESSAGES.LOGIN, async() => {
     const account = await authProvider.login(mainWindow);
-
     await mainWindow.loadFile(path.join(__dirname, './index.html'));
-    
     mainWindow.webContents.send(IPC_MESSAGES.SHOW_WELCOME_MESSAGE, account);
 });
 
