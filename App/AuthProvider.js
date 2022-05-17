@@ -8,7 +8,6 @@ const {
   LogLevel,
   CryptoProvider,
 } = require("@azure/msal-node");
-const { protocol } = require("electron");
 const { BrowserWindow } = require("electron");
 const CustomProtocolListener = require("./CustomProtocolListener");
 
@@ -63,7 +62,7 @@ class AuthProvider {
     this.setRequestObjects();
   }
 
-  // Creates a  "popup" window for interactive authentication
+  // Creates a "popup" window for interactive authentication
   static createAuthWindow() {
     return new BrowserWindow({
       width: 400,
@@ -168,7 +167,7 @@ class AuthProvider {
       ...this.authCodeUrlParams,
       scopes: tokenRequest.scopes,
       codeChallenge: this.pkceCodes.challenge, // PKCE Code Challenge
-      codeChallengeMethod: "S256", // PKCE Code Challenge Method
+      codeChallengeMethod: this.pkceCodes.challengeMethod, // PKCE Code Challenge Method
     };
 
     try {
