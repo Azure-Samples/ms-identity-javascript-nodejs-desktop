@@ -28,15 +28,18 @@ This sample demonstrates the following **MSAL Node** concepts:
 
 ## Contents
 
-| File/folder           | Description                                                  |
-|-----------------------|--------------------------------------------------------------|
-| `AppCreationScripts/` | Contains Powershell scripts for automating app registration. |
-| `App/authProvider.js` | Main authentication logic resides here.                      |
-| `App/main.js`         | Application main process.                                    |
-| `App/fetch.js`        | Axios HTTP client for calling endpoints with a bearer token. |
-| `App/renderer.js`     | Renderer processes and UI methods.                           |
-| `App/constants.js`    | Example user accounts in JSON                                |
-| `.env`                | Environment variables of authentication parameters.          |
+| File/folder                  | Description                                                  |
+|------------------------------|--------------------------------------------------------------|
+| `AppCreationScripts/`        | Contains Powershell scripts for automating app registration. |
+| `App/authProvider.js`        | Main authentication logic resides here.                      |
+| `App/main.js`                | Application main process.                                    |
+| `App/fetch.js`               | Axios HTTP client for calling endpoints with a bearer token. |
+| `App/renderer.js`            | Renderer processes and UI methods.                           |
+| `App/constants.js`           | Example user accounts in JSON .                              |
+| `.CustomProtocolListener.js` | Register and unregister a custom typed protocol.             |
+| `.UIManager.js`              | Environment variables of authentication parameters.          |
+| `.preload.js`                | Give the Renderer process controlled access to some Node API.|
+| `.env`                       | Environment variables of authentication parameters.          |
 
 ## Getting Started
 
