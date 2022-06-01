@@ -60,7 +60,7 @@ This sample demonstrates the following **MSAL Node** concepts:
 1. In the list of pages for the app, select **Authentication**.
 1. Select **Add a platform**, select **Mobile and desktop applications**
 1. In the **Redirect URIs** list, under **Suggested Redirect URIs for (mobile, desktop)** be sure to add `msal{YourAppId}://auth`.
-1. Select **Save**.
+1. Select **Configure**.
 
 #### Step 2: Clone the repository  
 
