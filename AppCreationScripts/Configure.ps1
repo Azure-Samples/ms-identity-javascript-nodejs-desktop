@@ -164,12 +164,13 @@ Function ConfigureApplications
    Write-Host "Creating the AAD application (msal-node-desktop)"
    # create the application 
    $clientAadApplication = New-AzureADApplication -DisplayName "msal-node-desktop" `
-                                                  -ReplyUrls "msal://redirect" `
                                                   -PublicClient $True
 
    # create the service principal of the newly created application 
    $currentAppId = $clientAadApplication.AppId
    $clientServicePrincipal = New-AzureADServicePrincipal -AppId $currentAppId -Tags {WindowsAzureActiveDirectoryIntegratedApp}
+
+
 
    # add the user running the script as an app owner if needed
    $owner = Get-AzureADApplicationOwner -ObjectId $clientAadApplication.ObjectId
@@ -179,6 +180,9 @@ Function ConfigureApplications
         Write-Host "'$($user.UserPrincipalName)' added as an application owner to app '$($clientServicePrincipal.DisplayName)'"
    }
 
+
+   #Update ReplyUrls
+   Set-AzureADApplication  -ObjectId $clientAadApplication.ObjectId -ReplyUrls "msal$($clientAadApplication.AppId)://auth" 
 
    Write-Host "Done creating the client application (msal-node-desktop)"
 
@@ -203,7 +207,7 @@ Function ConfigureApplications
    # Update config file for 'client'
    $configFile = $pwd.Path + "\..\.env"
    Write-Host "Updating the sample code ($configFile)"
-   $dictionary = @{ "Enter_the_Tenant_Info_Here" = $tenantId;"Enter_the_Application_Id_Here" = $clientAadApplication.AppId;"Enter_the_Cloud_Instance_Id_Here" = 'https://login.microsoftonline.com/';"Enter_the_Graph_Endpoint_Here" = 'https://graph.microsoft.com/' };
+    $dictionary = @{ "Enter_the_Tenant_Info_Here" = $tenantId; "Enter_the_Application_Id_Here" = $clientAadApplication.AppId; "Enter_the_Cloud_Instance_Id_Here" = 'https://login.microsoftonline.com/'; "Enter_the_Graph_Endpoint_Here" = 'https://graph.microsoft.com/'; "Enter_the_Redirect_Uri_Here" = "msal$($clientAadApplication.AppId)://auth"; };
    ReplaceInTextFile -configFilePath $configFile -dictionary $dictionary
   
    Add-Content -Value "</tbody></table></body></html>" -Path createdApps.html  
