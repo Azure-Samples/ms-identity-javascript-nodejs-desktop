@@ -11,6 +11,7 @@ const { IPC_MESSAGES } = require("./constants");
 
 const { callEndpointWithToken } = require("./fetch");
 const AuthProvider = require("./AuthProvider");
+const { protectedResources } = require("./authConfig");
 
 const authProvider = new AuthProvider();
 let mainWindow;
@@ -46,7 +47,7 @@ ipcMain.on(IPC_MESSAGES.LOGOUT, async () => {
 
 ipcMain.on(IPC_MESSAGES.GET_PROFILE, async () => {
   const tokenRequest = {
-    scopes: ["User.Read"],
+    scopes: protectedResources.graphMe.scopes
   };
 
   const token = await authProvider.getToken(tokenRequest);
@@ -55,7 +56,7 @@ ipcMain.on(IPC_MESSAGES.GET_PROFILE, async () => {
   await mainWindow.loadFile(path.join(__dirname, "./index.html"));
 
   const graphResponse = await callEndpointWithToken(
-    `${process.env.GRAPH_ENDPOINT_HOST}${process.env.GRAPH_ME_ENDPOINT}`,
+    protectedResources.graphMe.endpoint,
     token
   );
 
@@ -65,7 +66,7 @@ ipcMain.on(IPC_MESSAGES.GET_PROFILE, async () => {
 
 ipcMain.on(IPC_MESSAGES.GET_MAIL, async () => {
   const tokenRequest = {
-    scopes: ["Mail.Read"],
+    scopes: protectedResources.graphMessages.scopes,
   };
 
   const token = await authProvider.getToken(tokenRequest);
@@ -74,7 +75,7 @@ ipcMain.on(IPC_MESSAGES.GET_MAIL, async () => {
   await mainWindow.loadFile(path.join(__dirname, "./index.html"));
 
   const graphResponse = await callEndpointWithToken(
-    `${process.env.GRAPH_ENDPOINT_HOST}${process.env.GRAPH_MAIL_ENDPOINT}`,
+    protectedResources.graphMessages.endpoint,
     token
   );
 

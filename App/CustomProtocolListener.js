@@ -47,7 +47,7 @@ class CustomProtocolListener {
   }
 
   /**
-   * Unregisters a custom file protocol to stop listening for Auth Code response.
+   * Unregisters a custom string protocol to stop listening for Auth Code response.
    */
   close() {
     protocol.unregisterProtocol(this.host);

@@ -4,6 +4,7 @@
 const { contextBridge, ipcRenderer } = require("electron");
 const { IPC_MESSAGES } = require("./constants");
 const UIManager = require('./UIManager');
+const { protectedResources } = require('./authConfig')
 /**
  * This preload script exposes a "renderer" API to give
  * the Renderer process controlled access to some Node APIs
@@ -38,13 +39,13 @@ contextBridge.exposeInMainWorld("renderer", {
     ipcRenderer.on(IPC_MESSAGES.SET_PROFILE, (event, graphResponse) => {
       uiManager.updateUI(
         graphResponse,
-        `${process.env.GRAPH_ENDPOINT_HOST}${process.env.GRAPH_ME_ENDPOINT}`
+        protectedResources.graphMe.endpoint
       );
     });
     ipcRenderer.on(IPC_MESSAGES.SET_MAIL, (event, graphResponse) => {
       uiManager.updateUI(
         graphResponse,
-        `${process.env.GRAPH_ENDPOINT_HOST}${process.env.GRAPH_MAIL_ENDPOINT}`
+        protectedResources.graphMessages.endpoint
       );
     });
   }

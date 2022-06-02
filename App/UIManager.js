@@ -1,3 +1,5 @@
+const { protectedResources } = require("./authConfig");
+
 class UIManager {
   welcomeDiv;
   signInButton;
@@ -35,15 +37,10 @@ class UIManager {
     updateUI(data, endpoint) {
       console.log(`Graph API responded at: ${new Date().toString()}`);
 
-      if (
-        endpoint ===
-        `${process.env.GRAPH_ENDPOINT_HOST}${process.env.GRAPH_ME_ENDPOINT}`
-      ) {
+      if (endpoint === protectedResources.graphMe.endpoint) {
         this.setProfile(data);
-      } else if (
-        endpoint ===
-        `${process.env.GRAPH_ENDPOINT_HOST}${process.env.GRAPH_MAIL_ENDPOINT}`
-      ) {
+      } else if (endpoint === protectedResources.graphMessages.endpoint) {
+        
         this.setMail(data);
       }
     }

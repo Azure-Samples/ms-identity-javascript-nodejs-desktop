@@ -5,40 +5,11 @@
 
 const {
   PublicClientApplication,
-  LogLevel,
   CryptoProvider,
 } = require("@azure/msal-node");
 const { BrowserWindow } = require("electron");
 const CustomProtocolListener = require("./CustomProtocolListener");
-
-/**
- * To demonstrate best security practices, this Electron sample application makes use of
- * a custom file protocol instead of a regular web (https://) redirect URI in order to
- * handle the redirection step of the authorization flow, as suggested in the OAuth2.0 specification for Native Apps.
- */
-const CUSTOM_FILE_PROTOCOL_NAME = process.env.REDIRECT_URI.split(":")[0];
-
-/**
- * Configuration object to be passed to MSAL instance on creation.
- * For a full list of MSAL Node configuration parameters, visit:
- * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-node/docs/configuration.md
- */
-const MSAL_CONFIG = {
-  auth: {
-    clientId: process.env.CLIENT_ID,
-    authority: `${process.env.AAD_ENDPOINT_HOST}${process.env.TENANT_ID}`,
-    redirectUri: process.env.REDIRECT_URI,
-  },
-  system: {
-    loggerOptions: {
-      loggerCallback(loglevel, message, containsPii) {
-        console.log(message);
-      },
-      piiLoggingEnabled: false,
-      logLevel: LogLevel.Verbose,
-    },
-  },
-};
+const { msalConfig } = require('./authConfig')
 
 class AuthProvider {
   clientApplication;
@@ -47,17 +18,25 @@ class AuthProvider {
   authCodeRequest;
   pkceCodes;
   account;
+  customFileProtocolName;
 
   constructor() {
     /**
      * Initialize a public client application. For more information, visit:
      * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-node/docs/initialize-public-client-application.md
      */
-    this.clientApplication = new PublicClientApplication(MSAL_CONFIG);
+    this.clientApplication = new PublicClientApplication(msalConfig);
     this.account = null;
 
     // Initialize CryptoProvider instance
     this.cryptoProvider = new CryptoProvider();
+
+    /**
+     * To demonstrate best security practices, this Electron sample application makes use of
+     * a custom file protocol instead of a regular web (https://) redirect URI in order to
+     * handle the redirection step of the authorization flow, as suggested in the OAuth2.0 specification for Native Apps.
+     */
+    this.customFileProtocolName = msalConfig.auth.redirectUri.split(":")[0];
 
     this.setRequestObjects();
   }
@@ -75,7 +54,7 @@ class AuthProvider {
    */
   setRequestObjects() {
     const requestScopes = ["openid", "profile", "User.Read"];
-    const redirectUri = process.env.REDIRECT_URI;
+    const redirectUri = msalConfig.auth.redirectUri;
 
     this.authCodeUrlParams = {
       scopes: requestScopes,
@@ -194,7 +173,7 @@ class AuthProvider {
   async listenForAuthCode(navigateUrl, authWindow) {
     // Set up custom file protocol to listen for redirect response
     const authCodeListener = new CustomProtocolListener(
-      CUSTOM_FILE_PROTOCOL_NAME
+      this.customFileProtocolName
     );
     const codePromise = authCodeListener.start();
     authWindow.loadURL(navigateUrl);
