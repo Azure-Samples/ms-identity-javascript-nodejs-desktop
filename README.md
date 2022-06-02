@@ -11,7 +11,7 @@ description: "Demonstrates how to use MSAL Node to sign-in users and acquire acc
 urlFragment: "ms-identity-javascript-nodejs-desktop"
 ---
 
-# An Electron desktop application secured by MSAL Node on Microsoft identity platform
+# An Electron desktop application using MSAL Node on Microsoft identity platform
 
 This sample demonstrates how to use [MSAL Node](https://github.com/AzureAD/microsoft-authentication-library-for-js/tree/dev/lib/msal-node) to sign-in a user and acquire an access token for a protected resource such as Microsoft Graph in an Electron desktop application using the [authorization code grant with PKCE](https://docs.microsoft.com/azure/active-directory/develop/v2-oauth2-auth-code-flow) flow.
 
@@ -36,10 +36,10 @@ This sample demonstrates the following **MSAL Node** concepts:
 | `App/fetch.js`               | Axios HTTP client for calling endpoints with a bearer token. |
 | `App/renderer.js`            | Renderer processes and UI methods.                           |
 | `App/constants.js`           | Example user accounts in JSON .                              |
-| `.CustomProtocolListener.js` | Register and unregister a custom typed protocol.             |
-| `.UIManager.js`              | Application UI and elements.                                 |
-| `.preload.js`                | Give the Renderer process controlled access to some Node API.|
-| `.authConfig.js`             | Configuration objects to be passed to MSAL instanc.          |
+| `App/CustomProtocolListener.js` | Register and unregister a custom typed protocol.             |
+| `App/UIManager.js`              | Application UI and elements.                                 |
+| `App/preload.js`                | Give the Renderer process controlled access to some Node API.|
+| `App/authConfig.js`             | Configuration objects to be passed to MSAL instanc.          |
 
 ## Getting Started
 

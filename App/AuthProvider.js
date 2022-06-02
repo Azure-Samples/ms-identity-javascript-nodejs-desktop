@@ -9,7 +9,7 @@ const {
 } = require("@azure/msal-node");
 const { BrowserWindow } = require("electron");
 const CustomProtocolListener = require("./CustomProtocolListener");
-const { msalConfig } = require('./authConfig')
+const { msalConfig, REDIRECT_URI } = require('./authConfig')
 
 class AuthProvider {
   clientApplication;
@@ -36,7 +36,7 @@ class AuthProvider {
      * a custom file protocol instead of a regular web (https://) redirect URI in order to
      * handle the redirection step of the authorization flow, as suggested in the OAuth2.0 specification for Native Apps.
      */
-    this.customFileProtocolName = msalConfig.auth.redirectUri.split(":")[0];
+    this.customFileProtocolName = REDIRECT_URI.split(":")[0];
 
     this.setRequestObjects();
   }
@@ -53,17 +53,16 @@ class AuthProvider {
    * Initialize request objects used by this AuthModule.
    */
   setRequestObjects() {
-    const requestScopes = ["openid", "profile", "User.Read"];
-    const redirectUri = msalConfig.auth.redirectUri;
+    const requestScopes = ["User.Read"];
 
     this.authCodeUrlParams = {
       scopes: requestScopes,
-      redirectUri: redirectUri,
+      redirectUri: REDIRECT_URI,
     };
 
     this.authCodeRequest = {
       scopes: requestScopes,
-      redirectUri: redirectUri,
+      redirectUri: REDIRECT_URI,
       code: null,
     };
 
@@ -135,8 +134,7 @@ class AuthProvider {
      * PKCE specification https://tools.ietf.org/html/rfc7636#section-4
      */
 
-    const { verifier, challenge } =
-      await this.cryptoProvider.generatePkceCodes();
+    const { verifier, challenge } = await this.cryptoProvider.generatePkceCodes();
     this.pkceCodes.verifier = verifier;
     this.pkceCodes.challenge = challenge;
     const popupWindow = AuthProvider.createAuthWindow();
