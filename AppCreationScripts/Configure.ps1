@@ -207,7 +207,7 @@ Function ConfigureApplications
    # Update config file for 'client'
    $configFile = $pwd.Path + "\..\App\authConfig.js"
    Write-Host "Updating the sample code ($configFile)"
-    $dictionary = @{ "Enter_the_Tenant_Info_Here" = $tenantId; "Enter_the_Application_Id_Here" = $clientAadApplication.AppId; "Enter_the_Cloud_Instance_Id_Here" = 'https://login.microsoftonline.com'; "Enter_the_Graph_Endpoint_Here" = 'https://graph.microsoft.com'; "Enter_the_Redirect_Uri_Here" = "msal$($clientAadApplication.AppId)://auth"; };
+    $dictionary = @{ "Enter_the_Tenant_Info_Here" = $tenantId; "Enter_the_Application_Id_Here" = $clientAadApplication.AppId; "Enter_the_Cloud_Instance_Id_Here" = 'https://login.microsoftonline.com/'; "Enter_the_Graph_Endpoint_Here" = 'https://graph.microsoft.com/'; "Enter_the_Redirect_Uri_Here" = "msal$($clientAadApplication.AppId)://auth"; };
     ReplaceInTextFile -configFilePath $configFile -dictionary $dictionary
   
    Add-Content -Value "</tbody></table></body></html>" -Path createdApps.html  
