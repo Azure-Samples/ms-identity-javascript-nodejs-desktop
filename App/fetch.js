@@ -19,7 +19,7 @@ async function callEndpointWithToken(endpoint, accessToken) {
 
     console.log('Request made at: ' + new Date().toString());
 
-    const response = await axios.default.get(endpoint, options);
+    const response = await axios.get(endpoint, options);
 
     return response.data;
 }

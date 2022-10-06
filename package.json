@@ -15,15 +15,15 @@
   "license": "MIT",
   "devDependencies": {
     "babel": "^6.23.0",
-    "electron": "^18.2.3",
-    "webpack": "^5.6.0"
+    "electron": "^18.3.15",
+    "webpack": "^5.74.0"
   },
   "dependencies": {
-    "@azure/msal-node": "^1.0.0",
-    "axios": "^0.21.4",
+    "@azure/msal-node": "^1.14.1",
+    "axios": "^1.0.0",
     "bootstrap": "^4.5.3",
-    "dotenv": "^8.2.0",
-    "jquery": "^3.5.1",
+    "dotenv": "^8.6.0",
+    "jquery": "^3.6.1",
     "popper.js": "^1.16.1"
   }
 }
