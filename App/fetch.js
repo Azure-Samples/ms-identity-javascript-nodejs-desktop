@@ -18,10 +18,17 @@ async function callEndpointWithToken(endpoint, accessToken) {
     };
 
     console.log('Request made at: ' + new Date().toString());
-
-    const response = await axios.get(endpoint, options);
-
-    return response.data;
+    try {
+        const response = await axios.get(endpoint, options);
+        return response.data;
+    } catch (error){
+        if(error.response === 404){
+            console.log(error.response.data);
+        }else {
+            console.log(error)
+        }
+        return null;
+    }
 }
 
 module.exports = {

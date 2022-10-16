@@ -11,7 +11,7 @@ const { LogLevel } = require("@azure/msal-node");
  * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-node/docs/configuration.md
  */
 const AAD_ENDPOINT_HOST = "Enter_the_Cloud_Instance_Id_Here"; // include the trailing slash
-const REDIRECT_URI = "Enter_the_Redirect_Uri_Here";
+const REDIRECT_URI = "http://localhost";
 
 const msalConfig = {
   auth: {
