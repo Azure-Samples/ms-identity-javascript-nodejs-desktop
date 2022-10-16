@@ -38,7 +38,7 @@ This sample demonstrates the following **MSAL Node** concepts:
 | `App/constants.js`           | Example user accounts in JSON .                              |
 | `App/UIManager.js`           | Application UI and elements.                                 |
 | `App/preload.js`             | Give the Renderer process controlled access to some Node API.|
-| `App/authConfig.js`          | Configuration objects to be passed to MSAL instanc.          |
+| `App/authConfig.js`          | Configuration objects to be passed to MSAL instance.          |
 
 ## Getting Started
 
