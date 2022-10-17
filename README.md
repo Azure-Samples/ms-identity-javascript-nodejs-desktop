@@ -36,7 +36,7 @@ This sample demonstrates the following **MSAL Node** concepts:
 | `App/fetch.js`               | Axios HTTP client for calling endpoints with a bearer token. |
 | `App/renderer.js`            | Renderer processes and UI methods.                           |
 | `App/constants.js`           | Example user accounts in JSON .                              |
-| `App/UIManager.js`           | Application UI and elements.                                 |
+| `App/UIManager.js`           | Manages application UI via DOM elements                                 |
 | `App/preload.js`             | Give the Renderer process controlled access to some Node API.|
 | `App/authConfig.js`          | Configuration objects to be passed to MSAL instance.          |
 
