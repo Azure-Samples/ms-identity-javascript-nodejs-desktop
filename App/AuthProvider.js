@@ -23,7 +23,7 @@ class AuthProvider {
     }
 
     setRequestObjects() {
-        const requestScopes = ['User.Read'];
+        const requestScopes = ['User.Read', 'Mail.Read'];
 
         this.loginRequest = {
             scopes: requestScopes,
