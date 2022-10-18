@@ -7,6 +7,7 @@ const { PublicClientApplication } = require('@azure/msal-node');
 const { shell } = require('electron');
 
 class AuthProvider {
+    msalConfig
     clientApplication;
     account;
     cache;
@@ -16,22 +17,35 @@ class AuthProvider {
          * Initialize a public client application. For more information, visit:
          * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-node/docs/initialize-public-client-application.md
          */
-        this.clientApplication = new PublicClientApplication(msalConfig);
+        this.msalConfig = msalConfig;
+        this.clientApplication = new PublicClientApplication(this.msalConfig);
         this.cache = this.clientApplication.getTokenCache();
         this.account = null;
     }
 
     async login(tokenRequest) {
-        const authResponse = await this.getTokenInteractive(tokenRequest);
+        const authResponse = await this.getToken(tokenRequest);
         return this.handleResponse(authResponse);
     }
 
     async logout() {
         if (!this.account) return;
 
-        await this.cache.removeAccount(this.account);
-        this.account = null;
-
+        try {
+            /**
+             * If you would like to end the session with AAD, use the logout endpoint. You'll need to enable
+             * the optional token claim 'login_hint' for this to work as expected. For more information, visit:
+             * https://learn.microsoft.com/azure/active-directory/develop/v2-protocols-oidc#send-a-sign-out-request
+             */
+            if (this.account.idTokenClaims.hasOwnProperty('login_hint')) {
+                await shell.openExternal(`${this.msalConfig.auth.authority}/oauth2/v2.0/logout?logout_hint=${encodeURIComponent(this.account.idTokenClaims.login_hint)}`);
+            }
+    
+            await this.cache.removeAccount(this.account);
+            this.account = null;   
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     async getToken(tokenRequest) {
@@ -46,7 +60,7 @@ class AuthProvider {
             authResponse = await this.getTokenInteractive(tokenRequest);
         }
 
-        return authResponse.accessToken || null;
+        return authResponse || null;
     }
 
     async getTokenSilent(tokenRequest) {
@@ -61,7 +75,7 @@ class AuthProvider {
     async getTokenInteractive(tokenRequest) {
         try {
             const openBrowser = async (url) => {
-                shell.openExternal(url);
+                await shell.openExternal(url);
             };
 
             const authResponse = await this.clientApplication.acquireTokenInteractive({

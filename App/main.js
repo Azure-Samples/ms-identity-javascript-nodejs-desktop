@@ -50,9 +50,10 @@ app.on('activate', () => {
 // Event handlers
 ipcMain.on(IPC_MESSAGES.LOGIN, async () => {
     const account = await authProvider.login();
-    await mainWindow.loadFile(path.join(__dirname, "./index.html"));
 
+    await mainWindow.loadFile(path.join(__dirname, "./index.html"));
     mainWindow.show();
+    
     mainWindow.webContents.send(IPC_MESSAGES.SHOW_WELCOME_MESSAGE, account);
 });
 
@@ -68,7 +69,7 @@ ipcMain.on(IPC_MESSAGES.GET_PROFILE, async () => {
         scopes: protectedResources.graphMe.scopes
     };
 
-    const token = await authProvider.getToken(tokenRequest);
+    const tokenResponse = await authProvider.getToken(tokenRequest);
     const account = authProvider.account;
 
     await mainWindow.loadFile(path.join(__dirname, "./index.html"));
@@ -76,7 +77,7 @@ ipcMain.on(IPC_MESSAGES.GET_PROFILE, async () => {
 
     const graphResponse = await callEndpointWithToken(
         protectedResources.graphMe.endpoint,
-        token
+        tokenResponse.accessToken
     );
 
     mainWindow.webContents.send(IPC_MESSAGES.SHOW_WELCOME_MESSAGE, account);
