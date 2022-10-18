@@ -4,12 +4,13 @@
  */
 
 const { PublicClientApplication } = require('@azure/msal-node');
-const { msalConfig, loginRequest } = require('./authConfig');
+const { msalConfig } = require('./authConfig');
 const open = require('open');
 
 class AuthProvider {
     clientApplication;
     account;
+    loginRequest
 
     constructor() {
         /**
@@ -18,6 +19,16 @@ class AuthProvider {
          */
         this.clientApplication = new PublicClientApplication(msalConfig);
         this.account = null;
+        this.setRequestObjects();
+    }
+
+    setRequestObjects() {
+        const requestScopes = ['User.Read'];
+
+        this.loginRequest = {
+            scopes: requestScopes,
+            openBrowser: this.openBrowser,
+        };
     }
 
     async openBrowser(url) {
@@ -26,10 +37,7 @@ class AuthProvider {
     }
 
     async login() {
-        const authResult = await this.clientApplication.acquireTokenInteractive({
-            ...loginRequest,
-            openBrowser: this.openBrowser,
-        });
+        const authResult = await this.clientApplication.acquireTokenInteractive(this.loginRequest);
         return this.handleResponse(authResult);
     }
 
