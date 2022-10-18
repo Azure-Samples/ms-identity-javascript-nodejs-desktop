@@ -35,8 +35,8 @@ const msalConfig = {
  * https://docs.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent#openid-connect-scopes
  */
  const loginRequest = {
-    scopes: ['User.Read'],
-};
+     scopes: ['User.Read', 'Mail.Read'],
+ };
 
 /**
  * Add here the endpoints and scopes when obtaining an access token for protected web APIs. For more information, see:
