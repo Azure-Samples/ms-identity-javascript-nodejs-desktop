@@ -4,12 +4,11 @@
  */
 
 const { PublicClientApplication } = require('@azure/msal-node');
-const { msalConfig } = require('./authConfig');
+const { msalConfig, loginRequest } = require('./authConfig');
 const open = require('open');
 
 class AuthProvider {
     clientApplication;
-    loginRequest;
     account;
 
     constructor() {
@@ -19,20 +18,6 @@ class AuthProvider {
          */
         this.clientApplication = new PublicClientApplication(msalConfig);
         this.account = null;
-
-        this.setRequestObjects();
-    }
-
-    /**
-     * Initialize request objects used by this AuthModule.
-     */
-    setRequestObjects() {
-        const requestScopes = ['User.Read', 'Mail.Read'];
-
-        this.loginRequest = {
-            scopes: requestScopes,
-            openBrowser: this.openBrowser,
-        };
     }
 
     async openBrowser(url) {
@@ -41,7 +26,10 @@ class AuthProvider {
     }
 
     async login() {
-        const authResult = await this.clientApplication.acquireTokenInteractive(this.loginRequest);
+        const authResult = await this.clientApplication.acquireTokenInteractive({
+            ...loginRequest,
+            openBrowser: this.openBrowser,
+        });
         return this.handleResponse(authResult);
     }
 
@@ -60,12 +48,11 @@ class AuthProvider {
             authResponse = await this.getTokenSilent(tokenRequest);
         } else {
             console.log('get token interactive');
-            const authCodeRequest = {
-                ...this.loginRequest,
+            authResponse = await this.clientApplication.acquireTokenInteractive({
                 ...tokenRequest,
                 successTemplate: 'Acquired token interactive.',
-            };
-            authResponse = await this.clientApplication.acquireTokenInteractive(authCodeRequest);
+                openBrowser: this.openBrowser,
+            });
         }
 
         return authResponse.accessToken || null;
@@ -76,12 +63,11 @@ class AuthProvider {
             return await this.clientApplication.acquireTokenSilent(tokenRequest);
         } catch (error) {
             console.log('Silent token acquisition failed, acquiring token interactive');
-            const authCodeRequest = {
-                ...this.loginRequest,
+            return await this.clientApplication.acquireTokenInteractive({
                 ...tokenRequest,
                 successTemplate: 'Acquired token interactive.',
-            };
-            return await this.clientApplication.acquireTokenInteractive(authCodeRequest);
+                openBrowser: this.openBrowser,
+            });
         }
     }
 
