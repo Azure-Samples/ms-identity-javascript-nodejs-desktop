@@ -5,78 +5,80 @@
 
 const path = require("path");
 const { app, ipcMain, BrowserWindow } = require("electron");
-const { IPC_MESSAGES } = require("./constants");
+
+const AuthProvider = require("./AuthProvider");
 
 const { callEndpointWithToken } = require("./fetch");
-const AuthProvider = require("./AuthProvider");
-const { protectedResources } = require("./authConfig");
+const { IPC_MESSAGES } = require("./constants");
+const { protectedResources, msalConfig } = require("./authConfig");
 
-const authProvider = new AuthProvider();
+const authProvider = new AuthProvider(msalConfig);
 let mainWindow;
 
 function createWindow() {
-  mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: { preload: path.join(__dirname, "preload.js") },
-  });
+    mainWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        webPreferences: { preload: path.join(__dirname, "preload.js") },
+    });
+
+    mainWindow.on('show', () => {
+        setTimeout(() => {
+            mainWindow.focus();
+        }, 200);
+    });
 }
 
 app.on("ready", () => {
-  createWindow();
-  mainWindow.loadFile(path.join(__dirname, "./index.html"));
+    createWindow();
+    mainWindow.loadFile(path.join(__dirname, "./index.html"));
 });
 
 app.on("window-all-closed", () => {
-  app.quit();
+    app.quit();
 });
+
+app.on('activate', () => {
+    // On OS X it's common to re-create a window in the app when the
+    // dock icon is clicked and there are no other windows open.
+    if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow();
+    }
+});
+
 
 // Event handlers
 ipcMain.on(IPC_MESSAGES.LOGIN, async () => {
-  const account = await authProvider.login();
-  await mainWindow.loadFile(path.join(__dirname, "./index.html"));
-  mainWindow.webContents.send(IPC_MESSAGES.SHOW_WELCOME_MESSAGE, account);
+    const account = await authProvider.login();
+    await mainWindow.loadFile(path.join(__dirname, "./index.html"));
+
+    mainWindow.show();
+    mainWindow.webContents.send(IPC_MESSAGES.SHOW_WELCOME_MESSAGE, account);
 });
 
 ipcMain.on(IPC_MESSAGES.LOGOUT, async () => {
-  await authProvider.logout();
-  await mainWindow.loadFile(path.join(__dirname, "./index.html"));
+    await authProvider.logout();
+
+    await mainWindow.loadFile(path.join(__dirname, "./index.html"));
+    mainWindow.show();
 });
 
 ipcMain.on(IPC_MESSAGES.GET_PROFILE, async () => {
-  const tokenRequest = {
-    scopes: protectedResources.graphMe.scopes
-  };
+    const tokenRequest = {
+        scopes: protectedResources.graphMe.scopes
+    };
 
-  const token = await authProvider.getToken(tokenRequest);
-  const account = authProvider.account;
+    const token = await authProvider.getToken(tokenRequest);
+    const account = authProvider.account;
 
-  await mainWindow.loadFile(path.join(__dirname, "./index.html"));
+    await mainWindow.loadFile(path.join(__dirname, "./index.html"));
+    mainWindow.show();
 
-  const graphResponse = await callEndpointWithToken(
-    protectedResources.graphMe.endpoint,
-    token
-  );
+    const graphResponse = await callEndpointWithToken(
+        protectedResources.graphMe.endpoint,
+        token
+    );
 
-  mainWindow.webContents.send(IPC_MESSAGES.SHOW_WELCOME_MESSAGE, account);
-  mainWindow.webContents.send(IPC_MESSAGES.SET_PROFILE, graphResponse);
-});
-
-ipcMain.on(IPC_MESSAGES.GET_MAIL, async () => {
-  const tokenRequest = {
-    scopes: protectedResources.graphMessages.scopes,
-  };
-
-  const token = await authProvider.getToken(tokenRequest);
-  const account = authProvider.account;
-
-  await mainWindow.loadFile(path.join(__dirname, "./index.html"));
-
-  const graphResponse = await callEndpointWithToken(
-    protectedResources.graphMessages.endpoint,
-    token
-  );
-
-  mainWindow.webContents.send(IPC_MESSAGES.SHOW_WELCOME_MESSAGE, account);
-  mainWindow.webContents.send(IPC_MESSAGES.SET_MAIL, graphResponse);
+    mainWindow.webContents.send(IPC_MESSAGES.SHOW_WELCOME_MESSAGE, account);
+    mainWindow.webContents.send(IPC_MESSAGES.SET_PROFILE, graphResponse);
 });

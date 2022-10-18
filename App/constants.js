@@ -9,8 +9,6 @@ const IPC_MESSAGES = {
     LOGOUT: 'LOGOUT',
     GET_PROFILE: 'GET_PROFILE',
     SET_PROFILE: 'SET_PROFILE',
-    GET_MAIL: 'GET_MAIL',
-    SET_MAIL: 'SET_MAIL'
 }
 
 module.exports = {

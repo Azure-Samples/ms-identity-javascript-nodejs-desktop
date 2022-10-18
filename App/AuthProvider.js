@@ -4,62 +4,46 @@
  */
 
 const { PublicClientApplication } = require('@azure/msal-node');
-const { msalConfig } = require('./authConfig');
 const { shell } = require('electron');
 
 class AuthProvider {
     clientApplication;
     account;
-    loginRequest
+    cache;
 
-    constructor() {
+    constructor(msalConfig) {
         /**
          * Initialize a public client application. For more information, visit:
          * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-node/docs/initialize-public-client-application.md
          */
         this.clientApplication = new PublicClientApplication(msalConfig);
+        this.cache = this.clientApplication.getTokenCache();
         this.account = null;
-        this.setRequestObjects();
     }
 
-    setRequestObjects() {
-        const requestScopes = ['User.Read', 'Mail.Read'];
-
-        this.loginRequest = {
-            scopes: requestScopes,
-            openBrowser: this.openBrowser,
-        };
-    }
-
-    async openBrowser(url) {
-        shell.openExternal(url);
-    }
-
-    async login() {
-        const authResult = await this.clientApplication.acquireTokenInteractive(this.loginRequest);
-        return this.handleResponse(authResult);
+    async login(tokenRequest) {
+        const authResponse = await this.getTokenInteractive(tokenRequest);
+        return this.handleResponse(authResponse);
     }
 
     async logout() {
-        if (this.account) {
-            await this.clientApplication.getTokenCache().removeAccount(this.account);
-            this.account = null;
-        }
+        if (!this.account) return;
+
+        await this.cache.removeAccount(this.account);
+        this.account = null;
+
     }
 
     async getToken(tokenRequest) {
         let authResponse;
         const account = this.account || (await this.getAccount());
+
         if (account) {
             tokenRequest.account = account;
             authResponse = await this.getTokenSilent(tokenRequest);
         } else {
             console.log('get token interactive');
-            authResponse = await this.clientApplication.acquireTokenInteractive({
-                ...tokenRequest,
-                successTemplate: 'Acquired token interactive.',
-                openBrowser: this.openBrowser,
-            });
+            authResponse = await this.getTokenInteractive(tokenRequest);
         }
 
         return authResponse.accessToken || null;
@@ -70,11 +54,26 @@ class AuthProvider {
             return await this.clientApplication.acquireTokenSilent(tokenRequest);
         } catch (error) {
             console.log('Silent token acquisition failed, acquiring token interactive');
-            return await this.clientApplication.acquireTokenInteractive({
+            return await this.getTokenInteractive(tokenRequest);
+        }
+    }
+
+    async getTokenInteractive(tokenRequest) {
+        try {
+            const openBrowser = async (url) => {
+                shell.openExternal(url);
+            };
+
+            const authResponse = await this.clientApplication.acquireTokenInteractive({
                 ...tokenRequest,
-                successTemplate: 'Acquired token interactive.',
-                openBrowser: this.openBrowser,
+                openBrowser,
+                successTemplate: '<h1>Successfully signed in!</h1> <p>You can close this window now.</p>',
+                failureTemplate: '<h1>Oops! Something went wrong</h1> <p>Check the console for more information.</p>',
             });
+
+            return authResponse;
+        } catch (error) {
+            throw error;
         }
     }
 
@@ -97,8 +96,7 @@ class AuthProvider {
      * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
      */
     async getAccount() {
-        const cache = this.clientApplication.getTokenCache();
-        const currentAccounts = await cache.getAllAccounts();
+        const currentAccounts = await this.cache.getAllAccounts();
 
         if (!currentAccounts) {
             console.log('No accounts detected');

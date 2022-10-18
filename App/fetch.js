@@ -21,7 +21,7 @@ async function callEndpointWithToken(endpoint, accessToken) {
     try {
         const response = await axios.get(endpoint, options);
         return response.data;
-    } catch (error){
+    } catch (error) {
         console.log(error)
         return null;
     }

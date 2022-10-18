@@ -19,16 +19,10 @@ contextBridge.exposeInMainWorld('renderer', {
     sendSeeProfileMessage: () => {
         ipcRenderer.send('GET_PROFILE');
     },
-    sendReadMailMessage: () => {
-        ipcRenderer.send('GET_MAIL');
+    handleProfileData: (func) => {
+        ipcRenderer.on('SET_PROFILE', (event, ...args) => func(event, ...args));
     },
     showWelcomeMessage: (func) => {
         ipcRenderer.on('SHOW_WELCOME_MESSAGE', (event, ...args) => func(event, ...args));
     },
-    handleProfileData: (func) => {
-        ipcRenderer.on('SET_PROFILE', (event, ...args) => func(event, ...args));
-    },
-    handleMailData: (func) => {
-        ipcRenderer.on('SET_MAIL', (event, ...args) => func(event, ...args));
-    }
 });

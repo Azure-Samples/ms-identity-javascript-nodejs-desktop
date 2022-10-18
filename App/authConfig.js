@@ -13,19 +13,19 @@ const { LogLevel } = require("@azure/msal-node");
 const AAD_ENDPOINT_HOST = "Enter_the_Cloud_Instance_Id_Here"; // include the trailing slash
 
 const msalConfig = {
-  auth: {
-    clientId: "Enter_the_Application_Id_Here",
-    authority: `${AAD_ENDPOINT_HOST}Enter_the_Tenant_Info_Here`,
-  },
-  system: {
-    loggerOptions: {
-      loggerCallback(loglevel, message, containsPii) {
-        console.log(message);
-      },
-      piiLoggingEnabled: false,
-      logLevel: LogLevel.Verbose,
+    auth: {
+        clientId: "Enter_the_Application_Id_Here",
+        authority: `${AAD_ENDPOINT_HOST}Enter_the_Tenant_Info_Here`,
     },
-  },
+    system: {
+        loggerOptions: {
+            loggerCallback(loglevel, message, containsPii) {
+                console.log(message);
+            },
+            piiLoggingEnabled: false,
+            logLevel: LogLevel.Verbose,
+        },
+    },
 };
 
 /**
@@ -35,14 +35,10 @@ const msalConfig = {
 const GRAPH_ENDPOINT_HOST = "Enter_the_Graph_Endpoint_Here"; // include the trailing slash
 
 const protectedResources = {
-  graphMe: {
-    endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/me`,
-    scopes: ["User.Read"],
-  },
-  graphMessages: {
-    endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/me/messages`,
-    scopes: ["Mail.Read"],
-  },
+    graphMe: {
+        endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/me`,
+        scopes: ["User.Read"],
+    }
 };
 
 
