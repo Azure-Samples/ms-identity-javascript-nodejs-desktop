@@ -35,7 +35,7 @@ This sample demonstrates the following **MSAL Node** concepts:
 | `AppCreationScripts/`        | Contains Powershell scripts for automating app registration. |
 | `App/authProvider.js`        | Main authentication logic resides here.                      |
 | `App/main.js`                | Application main process.                                    |
-| `App/fetch.js`               | Axios HTTP client for calling endpoints with a bearer token. |
+| `App/graph.js`               | Instantiates Graph SDK client.                               |
 | `App/renderer.js`            | Renderer processes and UI methods.                           |
 | `App/constants.js`           | Example user accounts in JSON .                              |
 | `App/preload.js`             | Give the Renderer process controlled access to some Node API.|
@@ -61,6 +61,15 @@ This sample demonstrates the following **MSAL Node** concepts:
 1. Select **Add a platform**, select **Mobile and desktop applications**
 1. In the **Redirect URIs** section enter the following redirect URI `http://localhost`
 1. Select **Configure**.
+
+##### Configure Optional Claims
+
+1. Still on the same app registration, select the **Token configuration** blade to the left.
+1. Select **Add optional claim**:
+    1. Select **optional claim type**, then choose **ID**.
+    1. Select the optional claim **login_hint**.
+    > An opaque, reliable login hint claim. This claim is the best value to use for the login_hint OAuth parameter in all flows to get SSO.See $[optional claims](https://docs.microsoft.com/azure/active-directory/develop/active-directory-optional-claims) for more details on this optional claim.
+    1. Select **Add** to save your changes.
 
 #### Step 2: Clone the repository  
 

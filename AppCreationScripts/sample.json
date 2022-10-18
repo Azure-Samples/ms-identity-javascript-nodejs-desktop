@@ -18,9 +18,12 @@
             "RequiredResourcesAccess": [
                 {
                     "Resource": "Microsoft Graph",
-                    "DelegatedPermissions": ["User.Read", "Mail.Read"]
+                    "DelegatedPermissions": ["User.Read"]
                 }
-            ]
+            ],
+            "OptionalClaims": {
+                "IdTokenClaims": ["login_hint"]
+            }
         }
 	],
 	"CodeConfiguration": [
