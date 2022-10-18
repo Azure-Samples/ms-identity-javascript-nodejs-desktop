@@ -4,7 +4,7 @@
  */
 
 const { PublicClientApplication } = require('@azure/msal-node');
-const { msalConfig, REDIRECT_URI } = require('./authConfig');
+const { msalConfig } = require('./authConfig');
 const open = require('open');
 
 class AuthProvider {
@@ -31,7 +31,6 @@ class AuthProvider {
 
         this.loginRequest = {
             scopes: requestScopes,
-            redirectUri: REDIRECT_URI,
             openBrowser: this.openBrowser,
         };
     }

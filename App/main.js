@@ -3,8 +3,6 @@
  * Licensed under the MIT License.
  */
 
-require("dotenv").config();
-
 const path = require("path");
 const { app, ipcMain, BrowserWindow } = require("electron");
 const { IPC_MESSAGES } = require("./constants");
