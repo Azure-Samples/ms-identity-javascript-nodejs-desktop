@@ -8,9 +8,9 @@ const { app, ipcMain, BrowserWindow } = require("electron");
 
 const AuthProvider = require("./AuthProvider");
 
-const { callEndpointWithToken } = require("./fetch");
 const { IPC_MESSAGES } = require("./constants");
 const { protectedResources, msalConfig } = require("./authConfig");
+const getGraphClient = require("./graph");
 
 const authProvider = new AuthProvider(msalConfig);
 let mainWindow;
@@ -75,10 +75,7 @@ ipcMain.on(IPC_MESSAGES.GET_PROFILE, async () => {
     await mainWindow.loadFile(path.join(__dirname, "./index.html"));
     mainWindow.show();
 
-    const graphResponse = await callEndpointWithToken(
-        protectedResources.graphMe.endpoint,
-        tokenResponse.accessToken
-    );
+    const graphResponse = await getGraphClient(tokenResponse.accessToken).api(protectedResources.graphMe.endpoint).get();
 
     mainWindow.webContents.send(IPC_MESSAGES.SHOW_WELCOME_MESSAGE, account);
     mainWindow.webContents.send(IPC_MESSAGES.SET_PROFILE, graphResponse);

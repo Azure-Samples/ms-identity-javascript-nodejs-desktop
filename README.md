@@ -54,9 +54,9 @@ This sample demonstrates the following **MSAL Node** concepts:
 
 1. Navigate to the [Azure portal](https://portal.azure.com) and select the **Azure AD** service.
 1. Select the **App Registrations** blade on the left, then select **New registration**.
-     * In the **Name** section, enter a meaningful application name that will be displayed to users of the app, for example `msal-node-desktop`.
-     * In the **Supported account types** section, select **Accounts in this organizational directory only**.
-     * Select **Register** to create the application.
+    1. In the **Name** section, enter a meaningful application name that will be displayed to users of the app, for example `msal-node-desktop`.
+    1. In the **Supported account types** section, select **Accounts in this organizational directory only**.
+    1. Select **Register** to create the application.
 1. In the list of pages for the app, select **Authentication**.
 1. Select **Add a platform**, select **Mobile and desktop applications**
 1. In the **Redirect URIs** section enter the following redirect URI `http://localhost`
@@ -82,16 +82,16 @@ Clone this repository `git clone https://github.com/Azure-Samples/ms-identity-ja
 
 1. You'll need to install the dependencies of this sample once:
 
-    ```console
-    cd ms-identity-javascript-nodejs-desktop
-    npm install
-    ```
+```console
+cd ms-identity-javascript-nodejs-desktop
+npm install
+```
 
 1. Then, run the application via command prompt or console:
 
-    ```console
-    npm start
-    ```
+```console
+npm start
+```
 
 ## Contributing
 
