@@ -1,7 +1,7 @@
 {
 	"Sample": {
 		"Title": "An Electron desktop application secured by MSAL Node on Microsoft identity platform",
-		"Level": 200,
+		"Level": 100,
 		"Client": "Electron desktop app",
 		"Service": "Microsoft Graph",
 		"RepositoryUrl": "ms-identity-javascript-nodejs-desktop",

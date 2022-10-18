@@ -5,7 +5,7 @@
 
 const { PublicClientApplication } = require('@azure/msal-node');
 const { msalConfig } = require('./authConfig');
-const open = require('open');
+const { shell } = require('electron');
 
 class AuthProvider {
     clientApplication;
@@ -32,8 +32,7 @@ class AuthProvider {
     }
 
     async openBrowser(url) {
-        // You can open a browser window with any library or method you wish to use - the 'open' npm package is used here for demonstration purposes.
-        open(url);
+        shell.openExternal(url);
     }
 
     async login() {
@@ -101,7 +100,7 @@ class AuthProvider {
         const cache = this.clientApplication.getTokenCache();
         const currentAccounts = await cache.getAllAccounts();
 
-        if (currentAccounts === null) {
+        if (!currentAccounts) {
             console.log('No accounts detected');
             return null;
         }
