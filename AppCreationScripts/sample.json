@@ -1,27 +1,30 @@
 {
 	"Sample": {
 		"Title": "An Electron desktop application secured by MSAL Node on Microsoft identity platform",
-		"Level": 200,
+		"Level": 100,
 		"Client": "Electron desktop app",
 		"Service": "Microsoft Graph",
 		"RepositoryUrl": "ms-identity-javascript-nodejs-desktop",
-		"Endpoint": "AAD v2.0"
+		"Endpoint": "AAD v2.0",
+		"platform": "javascript"
+
 	},
 	"AADApps": [
 		{
-			"Id": "client",
-			"Name": "msal-node-desktop",
-			"Kind": "Desktop",
-			"ReplyUrls": "msal://redirect",
-			"RequiredResourcesAccess": [
-				{
-					"Resource": "Microsoft Graph",
-					"DelegatedPermissions": [
-						"User.Read"
-					]
-				}
-			]
-		}
+            "Id": "client",
+            "Name": "msal-node-desktop",
+            "Kind": "Desktop",
+            "ReplyUrls": "http://localhost",
+            "RequiredResourcesAccess": [
+                {
+                    "Resource": "Microsoft Graph",
+                    "DelegatedPermissions": ["User.Read"]
+                }
+            ],
+            "OptionalClaims": {
+                "IdTokenClaims": ["login_hint"]
+            }
+        }
 	],
 	"CodeConfiguration": [
 		{

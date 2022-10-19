@@ -4,13 +4,11 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-	<meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+	<meta http-equiv="Content-Security-Policy" content="script-src 'self'" />
 	<title>MSAL Node Electron Sample App</title>
 
 	<!-- adding Bootstrap 4 for UI components  -->
 	<link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
-	
-	<link rel="SHORTCUT ICON" href="https://c.s-microsoft.com/favicon.ico?v2" type="image/x-icon">
 </head>
 
 <body>
@@ -29,7 +27,7 @@
 	<h5 class="card-header text-center">Electron sample app calling MS Graph API using MSAL Node</h5>
 	<br>
 	<div class="row" style="margin:auto">
-		<div id="cardDiv" class="col-md-3" style="display:none">
+		<div id="cardDiv" class="col-md-6" style="display:none; margin:auto">
 			<div class="card text-center">
 				<div class="card-body">
 					<h5 class="card-title" id="WelcomeMessage">Please sign-in to see your profile and read your mails
@@ -38,30 +36,16 @@
 					<br>
 					<br>
 					<button class="btn btn-primary" id="seeProfile">See Profile</button>
-					<br>
-					<br>
-					<button class="btn btn-primary" id="readMail">Read Mails</button>
 				</div>
 			</div>
 		</div>
-		<br>
-		<br>
-		<div class="col-md-4">
-			<div class="list-group" id="list-tab" role="tablist">
-			</div>
-		</div>
-		<div class="col-md-5">
-			<div class="tab-content" id="nav-tabContent">
-			</div>
-		</div>
 	</div>
-	<br>
-	<br>
 
 	<!-- importing bootstrap.js and supporting js libraries -->
 	<script src="../node_modules/jquery/dist/jquery.js"></script>
 	<script src="../node_modules/popper.js/dist/umd/popper.js"></script>
 	<script src="../node_modules/bootstrap/dist/js/bootstrap.js"></script>
+
 	<!-- importing app scripts | load order is important -->
 	<script src="./renderer.js"></script>
 
