@@ -9,10 +9,16 @@ const { app, ipcMain, BrowserWindow } = require("electron");
 const AuthProvider = require("./AuthProvider");
 
 const { IPC_MESSAGES } = require("./constants");
-const { protectedResources, msalConfig } = require("./authConfig");
+const { protectedResources, msalConfig, persistenceConfiguration } = require("./authConfig");
 const getGraphClient = require("./graph");
 
-const authProvider = new AuthProvider(msalConfig);
+const {
+    DataProtectionScope,
+    PersistenceCreator,
+    PersistenceCachePlugin,
+} = require("@azure/msal-node-extensions");
+
+let authProvider;
 let mainWindow;
 
 function createWindow() {
@@ -22,11 +28,14 @@ function createWindow() {
         webPreferences: { preload: path.join(__dirname, "preload.js") },
     });
 
-    mainWindow.on('show', () => {
-        setTimeout(() => {
-            mainWindow.focus();
-        }, 200);
-    });
+    PersistenceCreator
+        .createPersistence(persistenceConfiguration)
+        .then((persistence) => {
+            msalConfig.cache.cachePlugin = new PersistenceCachePlugin(persistence);
+            
+            // Initialize the electron authenticator
+            authProvider = new AuthProvider(msalConfig);
+        });
 }
 
 app.on("ready", () => {
@@ -49,11 +58,13 @@ app.on('activate', () => {
 
 // Event handlers
 ipcMain.on(IPC_MESSAGES.LOGIN, async () => {
-    const account = await authProvider.login();
+    const account = await authProvider.login({
+        scopes: [],
+    });
 
     await mainWindow.loadFile(path.join(__dirname, "./index.html"));
     mainWindow.show();
-    
+
     mainWindow.webContents.send(IPC_MESSAGES.SHOW_WELCOME_MESSAGE, account);
 });
 

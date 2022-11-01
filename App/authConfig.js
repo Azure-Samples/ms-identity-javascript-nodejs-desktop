@@ -4,6 +4,21 @@
  */
 
 const { LogLevel } = require("@azure/msal-node");
+const { DataProtectionScope } = require("@azure/msal-node-extensions");
+
+/**
+ * Configure persistent cache options. For more information, visit:
+ * https://github.com/AzureAD/microsoft-authentication-library-for-js/tree/dev/extensions/msal-node-extensions
+ */
+const cachePath = "./cache.json";
+
+const persistenceConfiguration = {
+    cachePath,
+    dataProtectionScope: DataProtectionScope.CurrentUser,
+    serviceName: "test-msal-electron-service",
+    accountName: "test-msal-electron-account",
+    usePlaintextFileOnLinux: false,
+}
 
 /**
  * Configuration object to be passed to MSAL instance on creation.
@@ -16,6 +31,9 @@ const msalConfig = {
     auth: {
         clientId: "Enter_the_Application_Id_Here",
         authority: `${AAD_ENDPOINT_HOST}Enter_the_Tenant_Info_Here`,
+    },
+    cache: {
+        cachePlugin: null // set later in main.js
     },
     system: {
         loggerOptions: {
@@ -41,8 +59,8 @@ const protectedResources = {
     }
 };
 
-
 module.exports = {
-    msalConfig: msalConfig,
-    protectedResources: protectedResources,
+    msalConfig,
+    protectedResources,
+    persistenceConfiguration,
 };

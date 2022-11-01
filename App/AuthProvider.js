@@ -56,7 +56,6 @@ class AuthProvider {
             tokenRequest.account = account;
             authResponse = await this.getTokenSilent(tokenRequest);
         } else {
-            console.log('get token interactive');
             authResponse = await this.getTokenInteractive(tokenRequest);
         }
 
