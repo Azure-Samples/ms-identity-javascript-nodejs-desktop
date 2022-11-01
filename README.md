@@ -15,18 +15,25 @@ urlFragment: "ms-identity-javascript-nodejs-desktop"
 
 This sample demonstrates how to use [MSAL Node](https://github.com/AzureAD/microsoft-authentication-library-for-js/tree/dev/lib/msal-node) to sign-in a user and acquire an access token for a protected resource such as Microsoft Graph in an Electron desktop application using the [authorization code grant with PKCE](https://docs.microsoft.com/azure/active-directory/develop/v2-oauth2-auth-code-flow) flow.
 
+This sample backs the following articles on Microsoft Docs:
+
+- [Quickstart: Acquire a token and call Microsoft Graph API from a desktop application](https://learn.microsoft.com/azure/active-directory/develop/desktop-app-quickstart?pivots=devlang-nodejs-electron)
+- [Tutorial: Sign in users and call the Microsoft Graph API in an Electron desktop app](https://learn.microsoft.com/azure/active-directory/develop/tutorial-v2-nodejs-desktop)
+
 > :information_source: Looking for a TypeScript implementation? See: [ElectronTestApp](https://github.com/AzureAD/microsoft-authentication-library-for-js/tree/dev/samples/msal-node-samples/ElectronTestApp)
 
 > :information_source: Looking for an Electron with React implementation? See: [ElectronReactTestApp](https://github.com/AzureAD/microsoft-authentication-library-for-js/tree/dev/samples/msal-node-samples/ElectronReactTestApp)
+
+> :warning: This sample does not implement persistent caching. See [Caching with MSAL Node](https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-node/docs/caching.md) for more information.
 
 ## Features
 
 This sample demonstrates the following **MSAL Node** concepts:
 
-* Configuration
-* Login and logout
-* Acquiring an access token
-* Calling a web API
+- Configuration
+- Login and logout
+- Acquiring an access token
+- Calling a web API
 
 ## Contents
 
@@ -45,8 +52,8 @@ This sample demonstrates the following **MSAL Node** concepts:
 
 ### Prerequisites
 
-* [Node.js](https://nodejs.org/en/) must be installed to run this sample.
-* [Visual Studio Code](https://code.visualstudio.com/download) is recommended for running and editing this sample.
+- [Node.js](https://nodejs.org/en/) must be installed to run this sample.
+- [Visual Studio Code](https://code.visualstudio.com/download) is recommended for running and editing this sample.
 
 ### Register and Setup the application
 
@@ -68,7 +75,7 @@ This sample demonstrates the following **MSAL Node** concepts:
 1. Select **Add optional claim**:
     1. Select **optional claim type**, then choose **ID**.
     1. Select the optional claim **login_hint**.
-    > An opaque, reliable login hint claim. This claim is the best value to use for the login_hint OAuth parameter in all flows to get SSO.See $[optional claims](https://docs.microsoft.com/azure/active-directory/develop/active-directory-optional-claims) for more details on this optional claim.
+    > An opaque, reliable login hint claim. This claim is the best value to use for the login_hint OAuth parameter in all flows to get SSO. See $[optional claims](https://docs.microsoft.com/azure/active-directory/develop/active-directory-optional-claims) for more details.
     1. Select **Add** to save your changes.
 
 #### Step 2: Clone the repository  
@@ -80,12 +87,8 @@ Clone this repository `git clone https://github.com/Azure-Samples/ms-identity-ja
 1. Open the [.authConfig.js](./App/authConfig.js) file and provide the required configuration values.
     1. Replace the string `Enter_the_Application_Id_Here` with your app/client ID on Azure AD portal.
     1. Replace the string `Enter_the_Tenant_Info_Here` with your tenant ID on Azure AD portal.
-    1. Replace the string `Enter_the_Cloud_Instance_Id_Here` with `https://login.microsoftonline.com/` (see **note** below).
-    1. Replace the string `Enter_the_Graph_Endpoint_Here`. with `https://graph.microsoft.com/` (see **note** below).
-
-> :information_source: *note*: This is for multi-tenant applications located on the Global Azure cloud. For more information, see: [Use MSAL in a national cloud environment](https://docs.microsoft.com/azure/active-directory/develop/authentication-national-cloud)
-
-> :information_source: *note*: This is for MS Graph instance located on the Global Azure cloud. For more information, see: [Use Microsoft Graph in a national cloud environment](https://docs.microsoft.com/graph/deployments)
+    1. Replace the string `Enter_the_Cloud_Instance_Id_Here` with `https://login.microsoftonline.com/` (include the trailing slash).
+    1. Replace the string `Enter_the_Graph_Endpoint_Here`. with `https://graph.microsoft.com/` (include the trailing slash).
 
 #### step 4: Run  the sample
 

@@ -7,12 +7,11 @@ const path = require("path");
 const { app, ipcMain, BrowserWindow } = require("electron");
 
 const AuthProvider = require("./AuthProvider");
-
 const { IPC_MESSAGES } = require("./constants");
 const { protectedResources, msalConfig } = require("./authConfig");
 const getGraphClient = require("./graph");
 
-const authProvider = new AuthProvider(msalConfig);
+let authProvider;
 let mainWindow;
 
 function createWindow() {
@@ -22,11 +21,7 @@ function createWindow() {
         webPreferences: { preload: path.join(__dirname, "preload.js") },
     });
 
-    mainWindow.on('show', () => {
-        setTimeout(() => {
-            mainWindow.focus();
-        }, 200);
-    });
+    authProvider = new AuthProvider(msalConfig);
 }
 
 app.on("ready", () => {
@@ -52,7 +47,6 @@ ipcMain.on(IPC_MESSAGES.LOGIN, async () => {
     const account = await authProvider.login();
 
     await mainWindow.loadFile(path.join(__dirname, "./index.html"));
-    mainWindow.show();
     
     mainWindow.webContents.send(IPC_MESSAGES.SHOW_WELCOME_MESSAGE, account);
 });
@@ -61,7 +55,6 @@ ipcMain.on(IPC_MESSAGES.LOGOUT, async () => {
     await authProvider.logout();
 
     await mainWindow.loadFile(path.join(__dirname, "./index.html"));
-    mainWindow.show();
 });
 
 ipcMain.on(IPC_MESSAGES.GET_PROFILE, async () => {
@@ -73,9 +66,9 @@ ipcMain.on(IPC_MESSAGES.GET_PROFILE, async () => {
     const account = authProvider.account;
 
     await mainWindow.loadFile(path.join(__dirname, "./index.html"));
-    mainWindow.show();
 
-    const graphResponse = await getGraphClient(tokenResponse.accessToken).api(protectedResources.graphMe.endpoint).get();
+    const graphResponse = await getGraphClient(tokenResponse.accessToken)
+        .api(protectedResources.graphMe.endpoint).get();
 
     mainWindow.webContents.send(IPC_MESSAGES.SHOW_WELCOME_MESSAGE, account);
     mainWindow.webContents.send(IPC_MESSAGES.SET_PROFILE, graphResponse);

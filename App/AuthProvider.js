@@ -3,7 +3,7 @@
  * Licensed under the MIT License.
  */
 
-const { PublicClientApplication } = require('@azure/msal-node');
+const { PublicClientApplication, InteractionRequiredAuthError } = require('@azure/msal-node');
 const { shell } = require('electron');
 
 class AuthProvider {
@@ -23,8 +23,13 @@ class AuthProvider {
         this.account = null;
     }
 
-    async login(tokenRequest) {
-        const authResponse = await this.getToken(tokenRequest);
+    async login() {
+        const authResponse = await this.getToken({
+            // If there are scopes that you would like users to consent up front, add them below
+            // by default, MSAL will add the OIDC scopes to every token request, so we omit those here
+            scopes: [],
+        });
+
         return this.handleResponse(authResponse);
     }
 
@@ -40,9 +45,9 @@ class AuthProvider {
             if (this.account.idTokenClaims.hasOwnProperty('login_hint')) {
                 await shell.openExternal(`${this.msalConfig.auth.authority}/oauth2/v2.0/logout?logout_hint=${encodeURIComponent(this.account.idTokenClaims.login_hint)}`);
             }
-    
+
             await this.cache.removeAccount(this.account);
-            this.account = null;   
+            this.account = null;
         } catch (error) {
             console.log(error);
         }
@@ -56,7 +61,6 @@ class AuthProvider {
             tokenRequest.account = account;
             authResponse = await this.getTokenSilent(tokenRequest);
         } else {
-            console.log('get token interactive');
             authResponse = await this.getTokenInteractive(tokenRequest);
         }
 
@@ -67,8 +71,12 @@ class AuthProvider {
         try {
             return await this.clientApplication.acquireTokenSilent(tokenRequest);
         } catch (error) {
-            console.log('Silent token acquisition failed, acquiring token interactive');
-            return await this.getTokenInteractive(tokenRequest);
+            if (error instanceof InteractionRequiredAuthError) {
+                console.log('Silent token acquisition failed, acquiring token interactive');
+                return await this.getTokenInteractive(tokenRequest);
+            }
+
+            console.log(error);
         }
     }
 
@@ -82,7 +90,7 @@ class AuthProvider {
                 ...tokenRequest,
                 openBrowser,
                 successTemplate: '<h1>Successfully signed in!</h1> <p>You can close this window now.</p>',
-                failureTemplate: '<h1>Oops! Something went wrong</h1> <p>Check the console for more information.</p>',
+                errorTemplate: '<h1>Oops! Something went wrong</h1> <p>Check the console for more information.</p>',
             });
 
             return authResponse;
