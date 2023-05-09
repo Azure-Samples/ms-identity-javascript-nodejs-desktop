@@ -22,7 +22,7 @@ This sample backs the following articles on Microsoft Docs:
 
 > :information_source: Looking for a TypeScript implementation? See: [ElectronTestApp](https://github.com/AzureAD/microsoft-authentication-library-for-js/tree/dev/samples/msal-node-samples/ElectronTestApp)
 
-> :information_source: Looking for an Electron with React implementation? See: [ElectronReactTestApp](https://github.com/AzureAD/microsoft-authentication-library-for-js/tree/dev/samples/msal-node-samples/ElectronReactTestApp)
+> :information_source: Looking for an Electron with React implementation? See: [ElectronSystemBrowserTestApp](https://github.com/AzureAD/microsoft-authentication-library-for-js/tree/dev/samples/msal-node-samples/ElectronSystemBrowserTestApp)
 
 > :warning: This sample does not implement persistent caching. See [Caching with MSAL Node](https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-node/docs/caching.md) for more information.
 
