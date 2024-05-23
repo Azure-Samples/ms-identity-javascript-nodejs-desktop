@@ -6,7 +6,7 @@ products:
 - nodejs
 - electron
 - ms-graph
-- azure-active-directory
+- microsoft-entra-id
 description: "Demonstrates how to use MSAL Node to sign-in users and acquire access tokens for a protected resource such as Microsoft Graph in an Electron desktop application using the OAuth 2.0 authorization code flow with PKCE."
 urlFragment: "ms-identity-javascript-nodejs-desktop"
 ---
@@ -59,7 +59,7 @@ This sample demonstrates the following **MSAL Node** concepts:
 
 #### Step 1: Register the application
 
-1. Navigate to the [Azure portal](https://portal.azure.com) and select the **Azure AD** service.
+1. Navigate to the [Microsoft Entra admin center](https://entra.microsoft.com) and select the **Microsoft Entra ID** service.
 1. Select the **App Registrations** blade on the left, then select **New registration**.
     1. In the **Name** section, enter a meaningful application name that will be displayed to users of the app, for example `msal-node-desktop`.
     1. In the **Supported account types** section, select **Accounts in this organizational directory only**.
@@ -85,8 +85,8 @@ Clone this repository `git clone https://github.com/Azure-Samples/ms-identity-ja
 #### Step 3: Configure the Electron sample project
 
 1. Open the [.authConfig.js](./App/authConfig.js) file and provide the required configuration values.
-    1. Replace the string `Enter_the_Application_Id_Here` with your app/client ID on Azure AD portal.
-    1. Replace the string `Enter_the_Tenant_Info_Here` with your tenant ID on Azure AD portal.
+    1. Replace the string `Enter_the_Application_Id_Here` with your app/client ID on Microsoft Entra admin center.
+    1. Replace the string `Enter_the_Tenant_Info_Here` with your tenant ID on Microsoft Entra admin center.
     1. Replace the string `Enter_the_Cloud_Instance_Id_Here` with `https://login.microsoftonline.com/` (include the trailing slash).
     1. Replace the string `Enter_the_Graph_Endpoint_Here`. with `https://graph.microsoft.com/` (include the trailing slash).
 
