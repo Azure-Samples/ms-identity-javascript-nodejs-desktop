@@ -14,7 +14,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^20.0.0"
+    "electron": "^22.3.25"
   },
   "dependencies": {
     "@azure/msal-node": "^1.14.2",
